@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Name Selector</title>
+    <title>Random Name Selector Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -21,17 +21,19 @@
             align-items: center;
             padding: 20px;
             color: #fff;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             width: 100%;
-            background: rgba(25, 25, 60, 0.9);
+            background: rgba(25, 25, 60, 0.92);
             border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
             overflow: hidden;
             backdrop-filter: blur(10px);
             border: 2px solid #4a69bd;
+            position: relative;
         }
 
         header {
@@ -42,11 +44,24 @@
             overflow: hidden;
         }
 
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+
         header h1 {
             font-size: 3.5rem;
             margin-bottom: 15px;
             font-weight: 800;
             text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
         }
 
         header p {
@@ -54,6 +69,8 @@
             max-width: 700px;
             margin: 0 auto;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
         }
 
         .logo {
@@ -62,6 +79,8 @@
             margin-bottom: 25px;
             text-shadow: 0 0 20px rgba(246, 185, 59, 0.7);
             animation: pulse 2s infinite;
+            position: relative;
+            z-index: 1;
         }
 
         .content {
@@ -74,6 +93,7 @@
             .content {
                 flex-direction: column;
                 padding: 25px;
+                gap: 30px;
             }
         }
 
@@ -95,6 +115,9 @@
             color: #f6b93b;
             position: relative;
             padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .section-title::after {
@@ -118,6 +141,9 @@
             font-weight: 600;
             font-size: 1.2rem;
             color: #f6b93b;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         textarea {
@@ -131,12 +157,13 @@
             color: white;
             resize: none;
             transition: all 0.3s;
+            box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         textarea:focus {
             outline: none;
             border-color: #f6b93b;
-            box-shadow: 0 0 0 4px rgba(246, 185, 59, 0.3);
+            box-shadow: 0 0 0 4px rgba(246, 185, 59, 0.3), inset 0 4px 15px rgba(0, 0, 0, 0.3);
         }
 
         .note {
@@ -146,6 +173,9 @@
             border-left: 4px solid #f6b93b;
             margin-top: 20px;
             font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .btn {
@@ -166,6 +196,26 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, #e55039, #f6b93b);
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: -1;
+        }
+
+        .btn:hover::after {
+            opacity: 1;
         }
 
         .btn:hover {
@@ -184,6 +234,10 @@
             box-shadow: none;
         }
 
+        .btn:disabled::after {
+            display: none;
+        }
+
         .selector-container {
             width: 100%;
             height: 300px;
@@ -197,6 +251,7 @@
             border: 2px solid #4a69bd;
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 4px 15px rgba(0, 0, 0, 0.4);
         }
 
         .name-display {
@@ -211,6 +266,8 @@
             transition: all 0.2s;
             width: 100%;
             color: #f6b93b;
+            position: relative;
+            z-index: 1;
         }
 
         .select-btn {
@@ -224,6 +281,19 @@
             text-align: center;
             display: none;
             border-top: 3px solid #f6b93b;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .winner-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(246, 185, 59, 0.1) 0%, rgba(246, 185, 59, 0) 70%);
+            z-index: 0;
         }
 
         .winner-section.visible {
@@ -236,6 +306,8 @@
             color: #f6b93b;
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(246, 185, 59, 0.5);
+            position: relative;
+            z-index: 1;
         }
 
         .winner-name {
@@ -250,12 +322,40 @@
             text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             animation: pulse 2s infinite;
+            position: relative;
+            z-index: 1;
         }
 
         .reset-btn {
             background: linear-gradient(to right, #4a69bd, #1e3c72);
             max-width: 300px;
             margin: 30px auto 0;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+            background: rgba(10, 10, 30, 0.4);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #f6b93b;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
 
         .confetti {
@@ -266,6 +366,49 @@
             top: 0;
             opacity: 0;
             z-index: 10;
+        }
+
+        .history-section {
+            background: rgba(10, 10, 30, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .history-section.visible {
+            display: block;
+        }
+
+        .history-title {
+            color: #f6b93b;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .history-name {
+            font-weight: 500;
+        }
+
+        .history-time {
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
 
         @keyframes pulse {
@@ -285,6 +428,73 @@
             100% { opacity: 0.3; transform: scale(0.9); }
         }
 
+        @keyframes winnerGlow {
+            0% { box-shadow: 0 0 10px rgba(246, 185, 59, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(246, 185, 59, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(246, 185, 59, 0.5); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .secondary-btn {
+            background: rgba(74, 105, 189, 0.3);
+            border: 1px solid #4a69bd;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(74, 105, 189, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .import-export {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .winner-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: none;
+        }
+
+        .winner-card.visible {
+            display: block;
+            animation: winnerReveal 1.5s forwards;
+        }
+
+        @keyframes winnerReveal {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -293,34 +503,61 @@
             <div class="logo">
                 <i class="fas fa-crown"></i>
             </div>
-            <h1>RANDOM NAME SELECTOR</h1>
+            <h1>RANDOM NAME SELECTOR PRO</h1>
             <p>Enter multiple names and randomly select one winner for your giveaway or event</p>
         </header>
 
         <div class="content">
             <div class="input-section">
-                <h2 class="section-title">Enter Names</h2>
+                <h2 class="section-title"><i class="fas fa-edit"></i> Enter Names</h2>
                 <div class="form-group">
                     <label for="names"><i class="fas fa-users"></i> Names (one per line)</label>
-                    <textarea id="names" placeholder="Enter names, each on a new line&#10;Example:&#10;John Smith&#10;Sarah Johnson&#10;Michael Brown&#10;..."></textarea>
+                    <textarea id="names" placeholder="Enter names, each on a new line&#10;Example:&#10;John Smith&#10;Sarah Johnson&#10;Michael Brown&#10;Emily Davis&#10;James Wilson&#10;..."></textarea>
                 </div>
+                
+                <div class="import-export">
+                    <button id="import-btn" class="secondary-btn">
+                        <i class="fas fa-file-import"></i> Import
+                    </button>
+                    <button id="export-btn" class="secondary-btn">
+                        <i class="fas fa-file-export"></i> Export
+                    </button>
+                    <button id="clear-btn" class="secondary-btn">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="add-example-btn" class="secondary-btn">
+                        <i class="fas fa-lightbulb"></i> Add Example Names
+                    </button>
+                </div>
+                
                 <div class="note">
                     <i class="fas fa-lightbulb"></i> Tip: You can paste a list of names from a spreadsheet or document
                 </div>
             </div>
 
             <div class="display-section">
-                <h2 class="section-title">Draw Winner</h2>
+                <h2 class="section-title"><i class="fas fa-trophy"></i> Draw Winner</h2>
                 <div class="selector-container">
                     <div class="name-display" id="current-name">
                         <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
                         <span style="margin: 0 15px;">Ready to Draw</span>
                         <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
                     </div>
+                    
                     <button id="select-btn" class="btn select-btn">
                         <i class="fas fa-random"></i> Select Random Name
                     </button>
                 </div>
+            </div>
+        </div>
+
+        <div class="history-section" id="history-section">
+            <div class="history-title"><i class="fas fa-history"></i> Previous Winners</div>
+            <div class="history-list" id="history-list">
+                <!-- History items will be added here -->
             </div>
         </div>
 
@@ -333,6 +570,17 @@
         </div>
     </div>
 
+    <div class="winner-card" id="winner-card">
+        <div class="logo">
+            <i class="fas fa-crown"></i>
+        </div>
+        <h2>WINNER</h2>
+        <div class="winner-name" id="card-winner-name">Winner Name</div>
+        <button id="close-card-btn" class="btn reset-btn" style="margin-top: 30px;">
+            <i class="fas fa-times"></i> Close
+        </button>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const namesTextarea = document.getElementById('names');
@@ -341,10 +589,71 @@
             const winnerSection = document.getElementById('winner-section');
             const winnerName = document.getElementById('winner-name');
             const resetBtn = document.getElementById('reset-btn');
+            const historySection = document.getElementById('history-section');
+            const historyList = document.getElementById('history-list');
+            const importBtn = document.getElementById('import-btn');
+            const exportBtn = document.getElementById('export-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            const addExampleBtn = document.getElementById('add-example-btn');
+            const winnerCard = document.getElementById('winner-card');
+            const cardWinnerName = document.getElementById('card-winner-name');
+            const closeCardBtn = document.getElementById('close-card-btn');
             
             let namesArray = [];
             let selectionInterval;
             let isSelecting = false;
+            let totalDraws = 0;
+            let history = [];
+            
+            // Initialize the app
+            function initApp() {
+                updateStats();
+            }
+            
+            // Update statistics display
+            function updateStats() {
+                const namesText = namesTextarea.value.trim();
+                namesArray = namesText ? namesText.split('\n')
+                    .map(name => name.trim())
+                    .filter(name => name.length > 0) : [];
+                
+                totalNamesDisplay.textContent = namesArray.length;
+                drawsCountDisplay.textContent = totalDraws;
+                
+                // Show history section if there are previous winners
+                historySection.classList.toggle('visible', history.length > 0);
+            }
+            
+            // Add names to history
+            function addToHistory(winner) {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString();
+                
+                history.unshift({
+                    name: winner,
+                    time: timeString
+                });
+                
+                // Keep only last 5 winners
+                if (history.length > 5) history.pop();
+                
+                updateHistoryDisplay();
+            }
+            
+            // Update history display
+            function updateHistoryDisplay() {
+                historyList.innerHTML = '';
+                
+                history.forEach(entry => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    historyItem.innerHTML = `
+                        <span class="history-name">${entry.name}</span>
+                        <span class="history-time">${entry.time}</span>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            }
             
             // Start random name selection
             selectBtn.addEventListener('click', function() {
@@ -352,7 +661,7 @@
                 const namesText = namesTextarea.value.trim();
                 
                 if (!namesText) {
-                    alert("Please enter at least one name!");
+                    showError("Please enter at least one name!");
                     namesTextarea.focus();
                     return;
                 }
@@ -363,7 +672,7 @@
                     .filter(name => name.length > 0);
                 
                 if (namesArray.length < 2) {
-                    alert("Please enter at least two names!");
+                    showError("Please enter at least two names!");
                     return;
                 }
                 
@@ -390,48 +699,27 @@
                     const elapsed = Date.now() - startTime;
                     if (elapsed > duration * 0.7) {
                         clearInterval(selectionInterval);
-                        slowDownSelection();
+                        startSlowdown(100);
                     }
                     
                     counter++;
                 }, 50);
             });
             
-            function slowDownSelection() {
-                let counter = 0;
-                let slowDownCounter = 0;
-                const slowDownLimit = 20; // Number of slowdown steps
-                let delay = 100; // Initial delay
-                
-                const slowDownInterval = setInterval(() => {
-                    const randomIndex = Math.floor(Math.random() * namesArray.length);
-                    currentNameDisplay.textContent = namesArray[randomIndex];
-                    currentNameDisplay.style.animation = "nameFlash 0.1s";
-                    
-                    // Gradually increase delay
-                    slowDownCounter++;
-                    if (slowDownCounter > slowDownLimit) {
-                        clearInterval(slowDownInterval);
-                        selectWinner();
-                    } else {
-                        // Increase delay exponentially
-                        delay = delay * 1.3;
-                        clearInterval(slowDownInterval);
-                        slowDownSelectionWithDelay(delay);
-                    }
-                    
-                    counter++;
-                }, delay);
-            }
-            
-            function slowDownSelectionWithDelay(delay) {
+            // Recursive slowdown function
+            function startSlowdown(delay) {
+                // Display a random name
                 const randomIndex = Math.floor(Math.random() * namesArray.length);
                 currentNameDisplay.textContent = namesArray[randomIndex];
                 currentNameDisplay.style.animation = "nameFlash 0.1s";
-                
+
                 if (delay < 500) {
-                    setTimeout(() => slowDownSelectionWithDelay(delay * 1.3), delay);
+                    // Schedule next slowdown step with increased delay
+                    setTimeout(() => {
+                        startSlowdown(delay * 1.3);
+                    }, delay);
                 } else {
+                    // After the delay becomes too long, we stop and select the winner
                     selectWinner();
                 }
             }
@@ -450,8 +738,19 @@
                 winnerName.textContent = winner;
                 winnerSection.classList.add('visible');
                 
+                // Show winner card
+                cardWinnerName.textContent = winner;
+                winnerCard.classList.add('visible');
+                
                 // Create confetti
                 createConfetti();
+                
+                // Add to history
+                addToHistory(winner);
+                
+                // Update stats
+                totalDraws++;
+                updateStats();
                 
                 // Reset button state
                 selectBtn.disabled = false;
@@ -462,6 +761,7 @@
             resetBtn.addEventListener('click', function() {
                 // Reset UI
                 winnerSection.classList.remove('visible');
+                winnerCard.classList.remove('visible');
                 namesTextarea.disabled = false;
                 currentNameDisplay.innerHTML = `
                     <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
@@ -473,6 +773,11 @@
                 
                 // Clear any intervals just in case
                 clearInterval(selectionInterval);
+            });
+            
+            // Close winner card
+            closeCardBtn.addEventListener('click', function() {
+                winnerCard.classList.remove('visible');
             });
             
             // Create confetti effect
@@ -502,6 +807,85 @@
                     animation.onfinish = () => confetti.remove();
                 }
             }
+            
+            // Import functionality
+            importBtn.addEventListener('click', function() {
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '.txt';
+                
+                fileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (!file) return;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        namesTextarea.value = e.target.result;
+                        updateStats();
+                    };
+                    reader.readAsText(file);
+                });
+                
+                fileInput.click();
+            });
+            
+            // Export functionality
+            exportBtn.addEventListener('click', function() {
+                const namesText = namesTextarea.value.trim();
+                if (!namesText) {
+                    showError("No names to export!");
+                    return;
+                }
+                
+                const blob = new Blob([namesText], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'names-list.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+            
+            // Clear names
+            clearBtn.addEventListener('click', function() {
+                if (confirm("Are you sure you want to clear all names?")) {
+                    namesTextarea.value = '';
+                    updateStats();
+                }
+            });
+            
+            // Add example names
+            addExampleBtn.addEventListener('click', function() {
+                const examples = [
+                    "Alex Johnson",
+                    "Taylor Smith",
+                    "Jordan Williams",
+                    "Morgan Davis",
+                    "Casey Brown",
+                    "Riley Miller",
+                    "Quinn Wilson",
+                    "Avery Taylor",
+                    "Skyler Moore",
+                    "Peyton Anderson"
+                ];
+                
+                namesTextarea.value = examples.join('\n');
+                updateStats();
+            });
+            
+            // Show error message
+            function showError(message) {
+                alert(message);
+            }
+            
+            // Initialize the app
+            initApp();
+            
+            // Update stats when textarea changes
+            namesTextarea.addEventListener('input', updateStats);
         });
     </script>
 </body>
