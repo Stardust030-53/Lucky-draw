@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Name Selector Pro</title>
+    <title>Enhanced Random Name Selector</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -56,7 +56,7 @@
         }
 
         header h1 {
-            font-size: 3.5rem;
+            font-size: 3rem;
             margin-bottom: 15px;
             font-weight: 800;
             text-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
@@ -65,7 +65,7 @@
         }
 
         header p {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             max-width: 700px;
             margin: 0 auto;
             opacity: 0.9;
@@ -94,6 +94,14 @@
                 flex-direction: column;
                 padding: 25px;
                 gap: 30px;
+            }
+            
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
             }
         }
 
@@ -178,6 +186,34 @@
             gap: 8px;
         }
 
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            background: rgba(10, 10, 30, 0.4);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #4a69bd;
+        }
+
+        .stat-box {
+            text-align: center;
+            padding: 0 15px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #f6b93b;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(246, 185, 59, 0.5);
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
         .btn {
             background: linear-gradient(to right, #f6b93b, #e55039);
             color: white;
@@ -240,7 +276,7 @@
 
         .selector-container {
             width: 100%;
-            height: 300px;
+            height: 350px;
             background: rgba(10, 10, 30, 0.6);
             border-radius: 20px;
             display: flex;
@@ -302,7 +338,7 @@
         }
 
         .winner-title {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: #f6b93b;
             margin-bottom: 30px;
             text-shadow: 0 0 15px rgba(246, 185, 59, 0.5);
@@ -332,50 +368,15 @@
             margin: 30px auto 0;
         }
 
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-            background: rgba(10, 10, 30, 0.4);
-            border-radius: 12px;
-            padding: 15px;
-        }
-
-        .stat-box {
-            text-align: center;
-            padding: 10px;
-        }
-
-        .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #f6b93b;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .confetti {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #f0f;
-            top: 0;
-            opacity: 0;
-            z-index: 10;
-        }
-
         .history-section {
             background: rgba(10, 10, 30, 0.4);
             border-radius: 15px;
             padding: 20px;
-            margin-top: 20px;
+            margin-top: 30px;
             max-height: 150px;
             overflow-y: auto;
             display: none;
+            border: 1px solid #4a69bd;
         }
 
         .history-section.visible {
@@ -386,6 +387,9 @@
             color: #f6b93b;
             margin-bottom: 15px;
             font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .history-list {
@@ -397,46 +401,21 @@
         .history-item {
             display: flex;
             justify-content: space-between;
-            padding: 8px 12px;
+            padding: 10px 15px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
+            border-left: 3px solid #f6b93b;
+            animation: slideIn 0.3s ease-out;
         }
 
         .history-name {
             font-weight: 500;
+            font-size: 1.1rem;
         }
 
         .history-time {
             font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes nameFlash {
-            0% { opacity: 0.3; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0.3; transform: scale(0.9); }
-        }
-
-        @keyframes winnerGlow {
-            0% { box-shadow: 0 0 10px rgba(246, 185, 59, 0.5); }
-            50% { box-shadow: 0 0 30px rgba(246, 185, 59, 0.8); }
-            100% { box-shadow: 0 0 10px rgba(246, 185, 59, 0.5); }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            opacity: 0.8;
         }
 
         .action-buttons {
@@ -457,6 +436,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex: 1;
         }
 
         .secondary-btn:hover {
@@ -464,10 +444,36 @@
             transform: translateY(-2px);
         }
 
-        .import-export {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes nameFlash {
+            0% { opacity: 0.3; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.3; transform: scale(0.9); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #f0f;
+            top: 0;
+            opacity: 0;
+            z-index: 10;
         }
 
         .winner-card {
@@ -501,9 +507,9 @@
     <div class="container">
         <header>
             <div class="logo">
-                <i class="fas fa-crown"></i>
+                <i class="fas fa-random"></i>
             </div>
-            <h1>RANDOM NAME SELECTOR PRO</h1>
+            <h1>RANDOM NAME SELECTOR</h1>
             <p>Enter multiple names and randomly select one winner for your giveaway or event</p>
         </header>
 
@@ -515,26 +521,35 @@
                     <textarea id="names" placeholder="Enter names, each on a new line&#10;Example:&#10;John Smith&#10;Sarah Johnson&#10;Michael Brown&#10;Emily Davis&#10;James Wilson&#10;..."></textarea>
                 </div>
                 
-                <div class="import-export">
-                    <button id="import-btn" class="secondary-btn">
-                        <i class="fas fa-file-import"></i> Import
-                    </button>
-                    <button id="export-btn" class="secondary-btn">
-                        <i class="fas fa-file-export"></i> Export
-                    </button>
-                    <button id="clear-btn" class="secondary-btn">
-                        <i class="fas fa-trash"></i> Clear
-                    </button>
+                <div class="stats-container">
+                    <div class="stat-box">
+                        <div class="stat-value" id="total-names">0</div>
+                        <div class="stat-label">Total Names</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="draws-count">0</div>
+                        <div class="stat-label">Total Draws</div>
+                    </div>
                 </div>
                 
                 <div class="action-buttons">
                     <button id="add-example-btn" class="secondary-btn">
-                        <i class="fas fa-lightbulb"></i> Add Example Names
+                        <i class="fas fa-lightbulb"></i> Add Examples
+                    </button>
+                    <button id="clear-btn" class="secondary-btn">
+                        <i class="fas fa-trash"></i> Clear All
                     </button>
                 </div>
                 
                 <div class="note">
                     <i class="fas fa-lightbulb"></i> Tip: You can paste a list of names from a spreadsheet or document
+                </div>
+                
+                <div class="history-section" id="history-section">
+                    <div class="history-title"><i class="fas fa-history"></i> Previous Winners</div>
+                    <div class="history-list" id="history-list">
+                        <!-- History will be populated here -->
+                    </div>
                 </div>
             </div>
 
@@ -551,13 +566,6 @@
                         <i class="fas fa-random"></i> Select Random Name
                     </button>
                 </div>
-            </div>
-        </div>
-
-        <div class="history-section" id="history-section">
-            <div class="history-title"><i class="fas fa-history"></i> Previous Winners</div>
-            <div class="history-list" id="history-list">
-                <!-- History items will be added here -->
             </div>
         </div>
 
@@ -591,8 +599,8 @@
             const resetBtn = document.getElementById('reset-btn');
             const historySection = document.getElementById('history-section');
             const historyList = document.getElementById('history-list');
-            const importBtn = document.getElementById('import-btn');
-            const exportBtn = document.getElementById('export-btn');
+            const totalNamesDisplay = document.getElementById('total-names');
+            const drawsCountDisplay = document.getElementById('draws-count');
             const clearBtn = document.getElementById('clear-btn');
             const addExampleBtn = document.getElementById('add-example-btn');
             const winnerCard = document.getElementById('winner-card');
@@ -807,47 +815,6 @@
                     animation.onfinish = () => confetti.remove();
                 }
             }
-            
-            // Import functionality
-            importBtn.addEventListener('click', function() {
-                const fileInput = document.createElement('input');
-                fileInput.type = 'file';
-                fileInput.accept = '.txt';
-                
-                fileInput.addEventListener('change', function(e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-                    
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        namesTextarea.value = e.target.result;
-                        updateStats();
-                    };
-                    reader.readAsText(file);
-                });
-                
-                fileInput.click();
-            });
-            
-            // Export functionality
-            exportBtn.addEventListener('click', function() {
-                const namesText = namesTextarea.value.trim();
-                if (!namesText) {
-                    showError("No names to export!");
-                    return;
-                }
-                
-                const blob = new Blob([namesText], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = 'names-list.txt';
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            });
             
             // Clear names
             clearBtn.addEventListener('click', function() {
