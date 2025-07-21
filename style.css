@@ -560,3 +560,130 @@ textarea:focus {
 .winner-card-buttons .close-btn:hover {
     background: linear-gradient(to right, #495057, #343a40);
 }
+
+/* Add these new styles to your existing CSS */
+.navigation-buttons {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.navigation-buttons a {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Admin page specific styles */
+.admin .logo i {
+    color: #4a69bd;
+}
+
+/* Make sure buttons have consistent styling */
+.btn, .secondary-btn {
+    transition: all 0.3s;
+}
+
+.btn:hover, .secondary-btn:hover {
+    transform: translateY(-3px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navigation-buttons {
+        flex-direction: column;
+    }
+}
+
+/* History items styling */
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #f6b93b;
+    margin-bottom: 8px;
+}
+
+.history-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.8rem;
+}
+
+.history-date {
+    color: #f6b93b;
+    font-weight: bold;
+}
+
+/* Remove button styling */
+.remove-btn {
+    background: linear-gradient(to right, #e55039, #b71540);
+}
+
+.remove-btn:hover {
+    background: linear-gradient(to right, #b71540, #e55039);
+}
+
+.remove-btn::after {
+    background: linear-gradient(to right, #b71540, #e55039);
+}
+
+/* History items styling */
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 3px solid #f6b93b;
+    margin-bottom: 8px;
+}
+
+.history-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 0.8rem;
+}
+
+.history-date {
+    color: #f6b93b;
+    font-weight: bold;
+}
+
+/* Remove button styling */
+.remove-btn {
+    background: linear-gradient(to right, #e55039, #b71540);
+}
+
+.remove-btn:hover {
+    background: linear-gradient(to right, #b71540, #e55039);
+}
+
+.remove-btn::after {
+    background: linear-gradient(to right, #b71540, #e55039);
+}
+
+/* Scrollable history */
+.history-list {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+/* Scrollbar styling */
+.history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: #f6b93b;
+    border-radius: 3px;
+}
