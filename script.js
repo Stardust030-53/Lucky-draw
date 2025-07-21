@@ -1,190 +1,174 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const namesTextarea = document.getElementById('names');
+    // DOM Elements
     const currentNameDisplay = document.getElementById('current-name');
     const selectBtn = document.getElementById('select-btn');
     const historySection = document.getElementById('history-section');
     const historyList = document.getElementById('history-list');
     const totalNamesDisplay = document.getElementById('total-names');
     const drawsCountDisplay = document.getElementById('draws-count');
-    const clearBtn = document.getElementById('clear-btn');
-    const addExampleBtn = document.getElementById('add-example-btn');
     const winnerCardContainer = document.getElementById('winner-card-container');
     const winnerName = document.getElementById('winner-name');
     const resetBtn = document.getElementById('reset-btn');
-    const closeCardBtn = document.getElementById('close-card-btn');
-    
+    const removeBtn = document.getElementById('remove-btn');
+
+    // State variables
     let namesArray = [];
     let selectionInterval;
-    let isSelecting = false;
     let totalDraws = 0;
     let history = [];
-    
+    let currentWinnerIndex = -1;
+
     // Initialize the app
-    function initApp() {
+    function init() {
+        loadNames();
+        loadHistory();
         updateStats();
     }
-    
-	function resetUI() {
-        winnerCardContainer.classList.remove('visible');
-        namesTextarea.disabled = false; // Always re-enable the textarea
-        currentNameDisplay.innerHTML = `
-            <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
-            <span style="margin: 0 15px;">Ready to Draw</span>
-            <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
-        `;
-        currentNameDisplay.style.color = "#f6b93b";
-        currentNameDisplay.style.animation = "none";
-        clearInterval(selectionInterval);
+
+    // Load names from localStorage
+    function loadNames() {
+        const savedNames = localStorage.getItem('luckyDrawNames');
+        if (savedNames) {
+            namesArray = savedNames.split('\n')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+        }
     }
+
+    // Load history from localStorage
+    function loadHistory() {
+        const savedHistory = localStorage.getItem('luckyDrawHistory');
+        if (savedHistory) {
+            history = JSON.parse(savedHistory);
+        }
+    }
+
+    // Save history to localStorage
+    function saveHistory() {
+        localStorage.setItem('luckyDrawHistory', JSON.stringify(history));
+    }
+
     // Update statistics display
     function updateStats() {
-        const namesText = namesTextarea.value.trim();
-        namesArray = namesText ? namesText.split('\n')
-            .map(name => name.trim())
-            .filter(name => name.length > 0) : [];
-        
         totalNamesDisplay.textContent = namesArray.length;
         drawsCountDisplay.textContent = totalDraws;
-        
-        // Show history section if there are previous winners
         historySection.classList.toggle('visible', history.length > 0);
     }
-    
-    // Add names to history
+
+    // Add winner to history
     function addToHistory(winner) {
         const now = new Date();
-        const timeString = now.toLocaleTimeString();
         
         history.unshift({
             name: winner,
-            time: timeString
+            time: now.toLocaleTimeString(),
+            date: now.toLocaleDateString(),
+            timestamp: now.getTime()
         });
-        
-        // Keep only last 5 winners
-        if (history.length > 5) history.pop();
-        
+
+        // Keep last 100 winners
+        if (history.length > 100) {
+            history.pop();
+        }
+
+        saveHistory();
         updateHistoryDisplay();
     }
-    
+
     // Update history display
     function updateHistoryDisplay() {
-        historyList.innerHTML = '';
-        
-        history.forEach(entry => {
-            const historyItem = document.createElement('div');
-            historyItem.className = 'history-item';
-            historyItem.innerHTML = `
+        historyList.innerHTML = history.map(entry => `
+            <div class="history-item">
                 <span class="history-name">${entry.name}</span>
-                <span class="history-time">${entry.time}</span>
-            `;
-            historyList.appendChild(historyItem);
-        });
+                <div class="history-time">
+                    <span class="history-date">${entry.date}</span>
+                    <span>${entry.time}</span>
+                </div>
+            </div>
+        `).join('');
     }
-    
+
     // Start random name selection
     selectBtn.addEventListener('click', function() {
-        // Get names from textarea
-        const namesText = namesTextarea.value.trim();
-        
-        if (!namesText) {
-            showError("Please enter at least one name!");
-            namesTextarea.focus();
-            return;
-        }
-        
-        // Split names by new line and filter out empty lines
-        namesArray = namesText.split('\n')
-            .map(name => name.trim())
-            .filter(name => name.length > 0);
-        
         if (namesArray.length < 2) {
-            showError("Please enter at least two names!");
+            alert("Please add at least 2 names in the admin panel!");
             return;
         }
-        
-        // Disable button and textarea during selection
+
         selectBtn.disabled = true;
-        namesTextarea.disabled = true;
-        isSelecting = true;
-        
-        // Change button text
-        selectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Selecting Winner...';
-        
-        // Start name shuffling effect
+        selectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Selecting...';
+
         let counter = 0;
-        const duration = 3000; // 3 seconds
+        const duration = 3000;
         const startTime = Date.now();
-        
+
         selectionInterval = setInterval(() => {
-            // Random name for the shuffling effect
             const randomIndex = Math.floor(Math.random() * namesArray.length);
             currentNameDisplay.textContent = namesArray[randomIndex];
             currentNameDisplay.style.animation = "nameFlash 0.1s";
-            
-            // Slow down as we approach the end
+
             const elapsed = Date.now() - startTime;
             if (elapsed > duration * 0.7) {
                 clearInterval(selectionInterval);
                 startSlowdown(100);
             }
-            
+
             counter++;
         }, 50);
     });
-    
+
     // Recursive slowdown function
     function startSlowdown(delay) {
-        // Display a random name
         const randomIndex = Math.floor(Math.random() * namesArray.length);
         currentNameDisplay.textContent = namesArray[randomIndex];
         currentNameDisplay.style.animation = "nameFlash 0.1s";
 
         if (delay < 500) {
-            // Schedule next slowdown step with increased delay
-            setTimeout(() => {
-                startSlowdown(delay * 1.3);
-            }, delay);
+            setTimeout(() => startSlowdown(delay * 1.3), delay);
         } else {
-            // After the delay becomes too long, we stop and select the winner
             selectWinner();
         }
     }
-    
+
+    // Select and display winner
     function selectWinner() {
-        // Final random selection
-        const winnerIndex = Math.floor(Math.random() * namesArray.length);
-        const winner = namesArray[winnerIndex];
-        
-        // Display winner in the center display
+        currentWinnerIndex = Math.floor(Math.random() * namesArray.length);
+        const winner = namesArray[currentWinnerIndex];
+
+        // Update display
         currentNameDisplay.textContent = winner;
         currentNameDisplay.style.animation = "pulse 1s";
         currentNameDisplay.style.color = "#f6b93b";
-        
-        // Show winner card
         winnerName.textContent = winner;
         winnerCardContainer.classList.add('visible');
-        
-        // Create confetti
-        createConfetti();
-        
-        // Add to history
-        addToHistory(winner);
-        
+
         // Update stats
         totalDraws++;
+        addToHistory(winner);
         updateStats();
-        
-        // Reset button state
+
+        // Reset button
         selectBtn.disabled = false;
-        selectBtn.innerHTML = '<i class="fas fa-random"></i> Select Random Name';
-		namesTextarea.disabled = false; //Re-enable textarea after selection
+        selectBtn.innerHTML = '<i class="fas fa-random"></i> Draw Winner';
+        
+        createConfetti();
     }
-    
-    // Reset button functionality
-    resetBtn.addEventListener('click', function() {
-        // Reset UI
+
+    // Remove winner from list
+    removeBtn.addEventListener('click', function() {
+        if (currentWinnerIndex >= 0 && currentWinnerIndex < namesArray.length) {
+            namesArray.splice(currentWinnerIndex, 1);
+            localStorage.setItem('luckyDrawNames', namesArray.join('\n'));
+            totalNamesDisplay.textContent = namesArray.length;
+        }
+        resetUI();
+    });
+
+    // Reset UI
+    resetBtn.addEventListener('click', resetUI);
+
+    function resetUI() {
         winnerCardContainer.classList.remove('visible');
-        namesTextarea.disabled = false;
         currentNameDisplay.innerHTML = `
             <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
             <span style="margin: 0 15px;">Ready to Draw</span>
@@ -192,24 +176,16 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         currentNameDisplay.style.color = "#f6b93b";
         currentNameDisplay.style.animation = "none";
-        
-        // Clear any intervals just in case
         clearInterval(selectionInterval);
-    });
-    
-    // Close winner card
-    closeCardBtn.addEventListener('click', function() {
-        winnerCardContainer.classList.remove('visible');
-    });
-    
+        currentWinnerIndex = -1;
+    }
+
     // Create confetti effect
     function createConfetti() {
         const colors = ['#f6b93b', '#e55039', '#4a69bd', '#1e3c72', '#ffffff', '#6a89cc'];
         const container = document.querySelector('.container');
-        
-        // Use DocumentFragment for better performance
         const fragment = document.createDocumentFragment();
-        
+
         for (let i = 0; i < 200; i++) {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
@@ -219,8 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
             confetti.style.width = Math.random() * 12 + 8 + 'px';
             confetti.style.height = Math.random() * 12 + 8 + 'px';
             fragment.appendChild(confetti);
-            
-            // Animate confetti
+
             const animation = confetti.animate([
                 { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
                 { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 720}deg)`, opacity: 0 }
@@ -228,48 +203,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 duration: Math.random() * 3000 + 2000,
                 easing: 'cubic-bezier(0,0,0.2,1)'
             });
-            
+
             animation.onfinish = () => confetti.remove();
         }
-        
+
         container.appendChild(fragment);
     }
-    
-    // Clear names
-    clearBtn.addEventListener('click', function() {
-        if (confirm("Are you sure you want to clear all names?")) {
-            namesTextarea.value = '';
-            updateStats();
-        }
-    });
-    
-    // Add example names
-    addExampleBtn.addEventListener('click', function() {
-        const examples = [
-            "Alex Johnson",
-            "Taylor Smith",
-            "Jordan Williams",
-            "Morgan Davis",
-            "Casey Brown",
-            "Riley Miller",
-            "Quinn Wilson",
-            "Avery Taylor",
-            "Skyler Moore",
-            "Peyton Anderson"
-        ];
-        
-        namesTextarea.value = examples.join('\n');
-        updateStats();
-    });
-    
-    // Show error message
-    function showError(message) {
-        alert(message);
-    }
-    
+
     // Initialize the app
-    initApp();
-    
-    // Update stats when textarea changes
-    namesTextarea.addEventListener('input', updateStats);
+    init();
 });
