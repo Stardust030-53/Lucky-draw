@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Name Selector</title>
+    <title>Lucky Draw</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
@@ -17,11 +17,18 @@
         </header>
 
         <div class="content">
-            <div class="input-section">
-                <h2 class="section-title"><i class="fas fa-edit"></i> Enter Names</h2>
-                <div class="form-group">
-                    <label for="names"><i class="fas fa-users"></i> Names (one per line)</label>
-                    <textarea id="names" placeholder="Enter names, each on a new line&#10;Example:&#10;John Smith&#10;Sarah Johnson&#10;Michael Brown&#10;Emily Davis&#10;James Wilson&#10;..."></textarea>
+            <div class="display-section">
+                <h2 class="section-title"><i class="fas fa-trophy"></i> Draw Winner</h2>
+                <div class="selector-container">
+                    <div class="name-display" id="current-name">
+                        <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
+                        <span style="margin: 0 15px;">Ready to Draw</span>
+                        <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
+                    </div>
+                    
+                    <button id="select-btn" class="btn select-btn">
+                        <i class="fas fa-random"></i> Select Random Name
+                    </button>
                 </div>
                 
                 <div class="stats-container">
@@ -35,39 +42,17 @@
                     </div>
                 </div>
                 
-                <div class="action-buttons">
-                    <button id="add-example-btn" class="secondary-btn">
-                        <i class="fas fa-lightbulb"></i> Add Examples
-                    </button>
-                    <button id="clear-btn" class="secondary-btn">
-                        <i class="fas fa-trash"></i> Clear All
-                    </button>
-                </div>
-                
-                <div class="note">
-                    <i class="fas fa-lightbulb"></i> Tip: You can paste a list of names from a spreadsheet or document
-                </div>
-                
                 <div class="history-section" id="history-section">
                     <div class="history-title"><i class="fas fa-history"></i> Previous Winners</div>
                     <div class="history-list" id="history-list">
                         <!-- History will be populated here -->
                     </div>
                 </div>
-            </div>
-
-            <div class="display-section">
-                <h2 class="section-title"><i class="fas fa-trophy"></i> Draw Winner</h2>
-                <div class="selector-container">
-                    <div class="name-display" id="current-name">
-                        <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
-                        <span style="margin: 0 15px;">Ready to Draw</span>
-                        <i class="fas fa-star" style="font-size: 2rem; opacity: 0.7;"></i>
-                    </div>
-                    
-                    <button id="select-btn" class="btn select-btn">
-                        <i class="fas fa-random"></i> Select Random Name
-                    </button>
+                
+                <div class="navigation-buttons">
+                    <a href="admin.html" class="secondary-btn">
+                        <i class="fas fa-user-cog"></i> Manage Names
+                    </a>
                 </div>
             </div>
         </div>
@@ -86,8 +71,8 @@
                 <button id="reset-btn" class="btn reset-btn">
                     <i class="fas fa-redo"></i> Draw Again
                 </button>
-                <button id="close-card-btn" class="btn close-btn">
-                    <i class="fas fa-times"></i> Close
+                <button id="remove-btn" class="btn remove-btn">
+                    <i class="fas fa-user-minus"></i> Remove Winner
                 </button>
             </div>
         </div>
